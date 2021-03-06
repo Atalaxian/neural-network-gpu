@@ -47,15 +47,10 @@ class Network:
         robust_scaler = preprocessing.RobustScaler()
         np.random.seed(0)
         dataset = dataset.dropna()
-        print('Изначальная размерность:')
-        print(dataset.shape)
         dataset = dataset[dataset['p'] < 5]
-        print('Конечная размерность:')
-        print(dataset.shape)
         target = np.array(dataset['v'])
         dataset = dataset.drop('v', axis=1)
         target = robust_scaler.fit_transform(target.reshape(-1, 1))
-        print(target)
         features_std = std_scaler.fit_transform(dataset)
         joblib.dump(robust_scaler, 'Models/rob_scaler_sec.pkl')
         joblib.dump(std_scaler, 'Models/std_scaler_sec.pkl')
@@ -84,17 +79,10 @@ class Network:
             batch_size=500,
             validation_data=(features_test, target_test)
         )
-        target_1 = mynetwork.predict(features_test)
-        print(history)
         training_loss = history.history['loss']
-        print(training_loss)
         test_loss = history.history['val_loss']
-        print(test_loss)
         epoch_count = range(1, len(training_loss) + 1)
         self.graph_loss(epoch_count, training_loss, test_loss)
-        for x, elem in enumerate(target_1):
-            text = str(elem) + ' ' + str(target_test[x])
-            print(text)
 
     def first_network(self, copy=False):
         if copy:
@@ -104,14 +92,9 @@ class Network:
         std_scaler = StandardScaler()
         np.random.seed(0)
         dataset = dataset.dropna()
-        print('Изначальная размерность:')
-        print(dataset.shape)
         dataset = dataset[dataset['v'] < 200]
-        print('Конечная размерность:')
-        print(dataset.shape)
         target = np.array(dataset['v'])
         dataset = dataset.drop('v', axis=1)
-        print(target)
         features_std = std_scaler.fit_transform(dataset)
         joblib.dump(std_scaler, 'Models/std_scaler_first.pkl')
         features_train, features_test, target_train, target_test = \
@@ -139,15 +122,7 @@ class Network:
             batch_size=200,
             validation_data=(features_test, target_test)
         )
-        target_1 = network.predict(features_test)
-        print(history)
         training_loss = history.history['loss']
-        print(training_loss)
         test_loss = history.history['val_loss']
-        print(test_loss)
         epoch_count = range(1, len(training_loss) + 1)
         self.graph_loss(epoch_count, training_loss, test_loss)
-        for x, elem in enumerate(target_1):
-            text = str(elem) + ' ' + str(target_test[x])
-            print(text)
-        print(network.predict(std_scaler.transform(np.array([[100, 25]]))))
