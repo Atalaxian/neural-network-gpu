@@ -1,6 +1,5 @@
 import sys
 import os
-os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
 import pandas as pd
 import numpy as np
 from networks import Network
@@ -11,6 +10,8 @@ from PyQt5 import QtCore
 from main_window import Ui_Form
 from keras.models import load_model
 import joblib
+
+os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
 
 
 def fit():
@@ -62,11 +63,8 @@ class Window(QWidget, Ui_Form):
             result = self.network_1.predict(features)
             self.result.setText(str(result[0][0]))
 
+
 if __name__ == '__main__':
-    #my_dataset = pd.read_excel('input.xlsx', sheet_name=0, na_values=np.nan)
-    #network = Network(my_dataset)
-    #network.first_network(copy=True)
-    #network.second_network(copy=True)
     qapp = QApplication(sys.argv)
     window = Window()
     window.show()
